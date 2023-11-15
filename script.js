@@ -1,28 +1,42 @@
-const day = document.getElementById("day");
-const hour = document.getElementById("hour");
-const min = document.getElementById("min");
-const sec = document.getElementById("sec");
+const day = document.querySelector("[data-day]");
+const hour = document.querySelector("[data-hour]");
+const min = document.querySelector("[data-min]");
+const sec = document.querySelector("[data-sec]");
+const container = document.querySelector("[data-container]");
 
+const newYears = "31 dec 2023";
+let days;
+let hours;
+let minutes;
+let seconds;
+let distance;
 
-const newYears = "1 dec 2021"
-function countDown(){
-    const newYearDate = new Date(newYears)
-    const currentDate = new Date()
-    const totalSeconds = (newYearDate - currentDate) / 1000;
+const x = setInterval(countDown, 1000);
 
-    const days = Math.floor(totalSeconds / 3600 / 24);
-    const hours = Math.floor(totalSeconds / 3600) % 24;
-    const minutes = Math.floor(totalSeconds / 60) % 60;
-    const seconds = Math.floor(totalSeconds) % 60;
+function countDown() {
+     const newYearDate = new Date(newYears);
+     const currentDate = new Date();
 
-    day.innerHTML = days;
-    hour.innerHTML = hours;
-    min.innerHTML = format(minutes);
-    sec.innerHTML = format(seconds);
+     distance = newYearDate - currentDate;
+
+     days = Math.floor(distance / (1000 * 60 * 60 * 24));
+     hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+     minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+     seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+     day.innerHTML = "d " + days;
+     hour.innerHTML = "h " + hours;
+     min.innerHTML = format("m " + minutes);
+     sec.innerHTML = format("s " + seconds);
+
+     if (distance < 0) {
+          clearInterval(x);
+          container.innerHTML = "Happy New Year";
+          container.classList.add("finish");
+     }
 }
-function format(time){
-    return time < 10 ? `0${time}` : time;s
+function format(num) {
+     return num < 10 ? `0${num}` : num;
 }
 
 countDown();
-setInterval(countDown, 1000)
